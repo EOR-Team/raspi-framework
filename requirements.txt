@@ -20,4 +20,4 @@ flask
 ./assets/robomaster-0.1.1.68-py3-none-any.whl
 
 # PyCoral API
-./assets/pycoral-2.0.0-cp38-cp38-linux_aarch64.whl
+./assets/pycoral-2.0.0-cp39-cp39-linux_aarch64.whl
