@@ -34,7 +34,8 @@ SERIAL_BYTESIZE      = s.EIGHTBITS     # 串口数据位
 SERIAL_PARITY        = s.PARITY_NONE   # 串口校验位
 SERIAL_STOPBITS      = s.STOPBITS_ONE  # 串口停止位
 SERIAL_EOL           = "\n"            # 串口通信结束符
-SERIAL_RX_READ_DELAY = 0.08            # 串口接收线程轮询延时（秒）
+SERIAL_RX_DELAY      = 0.02            # 串口接收线程轮询延时（秒）
+SERIAL_TX_DELAY      = 0.08            # 串口发送线程轮询延时（秒）
 
 # === 自瞄模型相关配置 ===
 AIMBOT_MODEL_PATH      = "model/aimbot/model_edgetpu.tflite"  # 自瞄模型路径
@@ -80,8 +81,8 @@ __all__ = [
     "IMSHOW_ON",
     "ANNOTATE_ON",
     "CAMERA_INDEX",
-    "CAMERA_WIDTH_COLLECT",
-    "CAMERA_HEIGHT_COLLECT",
+    "CAMERA_WIDTH_COL",
+    "CAMERA_HEIGHT_COL",
     "CAMERA_FPS",
     "CAMERA_FOURCC",
     "CAMERA_AUTO_EXPOSURE",
