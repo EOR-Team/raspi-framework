@@ -38,7 +38,7 @@ SERIAL_RX_DELAY      = 0.02            # 串口接收线程轮询延时（秒）
 SERIAL_TX_DELAY      = 0.08            # 串口发送线程轮询延时（秒）
 
 # === 自瞄模型相关配置 ===
-AIMBOT_MODEL_PATH      = "model/aimbot/model_edgetpu.tflite"  # 自瞄模型路径
+AIMBOT_MODEL_PATH      = "model/aimbot/yolo11n.26.1.2.pt"  # 自瞄模型路径
 AIMBOT_PREDICT_DEVICE  = "tpu"                     # 自瞄模型推理设备 ("CPU" 或 "GPU")
 
 # === 自瞄PID控制参数 ===
@@ -94,7 +94,8 @@ __all__ = [
     "SERIAL_PARITY",
     "SERIAL_STOPBITS",
     "SERIAL_EOL",
-    "SERIAL_RX_READ_DELAY",
+    "SERIAL_RX_DELAY",
+    "SERIAL_TX_DELAY",
     "AIMBOT_MODEL_PATH",
     "AIMBOT_PREDICT_DEVICE",
     "AIMBOT_HOR_PID",

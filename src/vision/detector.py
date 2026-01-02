@@ -46,7 +46,7 @@ class Detector:
         """
 
         try:
-            self.model = YOLO(self.model_path)
+            self.model = YOLO(model=self.model_path, task="detect")
             self.enabled = True
             return True
         except Exception as e:
