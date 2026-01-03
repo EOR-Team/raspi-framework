@@ -19,7 +19,7 @@ CAMERA_INDEX         =     0   # 摄像头索引，默认0为内置摄像头
 CAMERA_WIDTH_COL     =   640   # 摄像头分辨率宽度 (用于数据采集)
 CAMERA_HEIGHT_COL    =   480   # 摄像头分辨率高度 (用于数据采集)
 CAMERA_WIDTH_INF     =   320   # 摄像头分辨率宽度 (用于推理)
-CAMERA_HEIGHT_INF    =   240   # 摄像头分辨率高度 (用于推理)
+CAMERA_HEIGHT_INF    =   320   # 摄像头分辨率高度 (用于推理)
 CAMERA_FPS           =    60   # 摄像头帧率
 CAMERA_FOURCC        = "MJPG"  # 摄像头编码格式
 CAMERA_AUTO_EXPOSURE =     1   # 自动曝光模式
@@ -38,7 +38,7 @@ SERIAL_RX_DELAY      = 0.02            # 串口接收线程轮询延时（秒）
 SERIAL_TX_DELAY      = 0.08            # 串口发送线程轮询延时（秒）
 
 # === 自瞄模型相关配置 ===
-AIMBOT_MODEL_PATH      = "model/aimbot/yolo11n.26.1.2.pt"  # 自瞄模型路径
+AIMBOT_MODEL_PATH      = "model/aimbot/yolov8n.26.1.2_fullint8_edgetpu.tflite"  # 自瞄模型路径
 AIMBOT_PREDICT_DEVICE  = "tpu"                     # 自瞄模型推理设备 ("CPU" 或 "GPU")
 
 # === 自瞄PID控制参数 ===
