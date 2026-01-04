@@ -38,8 +38,9 @@ SERIAL_RX_DELAY      = 0.02            # 串口接收线程轮询延时（秒）
 SERIAL_TX_DELAY      = 0.08            # 串口发送线程轮询延时（秒）
 
 # === 自瞄模型相关配置 ===
-AIMBOT_MODEL_PATH      = "model/aimbot/yolov8n.26.1.2_fullint8_edgetpu.tflite"  # 自瞄模型路径
-AIMBOT_PREDICT_DEVICE  = "tpu"                     # 自瞄模型推理设备 ("CPU" 或 "GPU")
+AIMBOT_MODEL_PATH      = "aimbot/yolov8n.26.1.2_fullint8_edgetpu.tflite"  # 自瞄模型路径
+AIMBOT_CONF_THRESHOLD  = 0.35    # 自瞄模型置信度阈值
+AIMBOT_NMS_THRESHOLD   = 0.45   # 自瞄模型NMS阈值
 
 # === 自瞄PID控制参数 ===
 from simple_pid import PID
