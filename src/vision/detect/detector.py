@@ -15,7 +15,7 @@ from typing import Any
 from dataclasses import dataclass
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
-from PIL import Image
+# from PIL import Image
 import numpy as np
 import os
 import cv2
@@ -34,6 +34,9 @@ class DetectionResult:
     idx: int # 目标ID
     conf: float # 置信度
     xyxyn: tuple[float, float, float, float] # 归一化边界框 (x_min, y_min, x_max, y_max)
+
+    def __str__(self):
+        return f"DetectionResult(idx={self.idx}, conf={self.conf:.2f}, x1={self.xyxyn[0]:.2f}, y1={self.xyxyn[1]:.2f}, x2={self.xyxyn[2]:.2f}, y2={self.xyxyn[3]:.2f})"
 
 
 def dequantize(output: np.ndarray, detail: dict) -> np.ndarray:
@@ -200,7 +203,9 @@ class Detector:
 
         t0 = time.perf_counter()
 
-        frame = Image.fromarray(image.astype('uint8')).convert('RGB').resize((self.input_width, self.input_height))
+        # frame = Image.fromarray(image.astype('uint8')).convert('RGB').resize((self.input_width, self.input_height))
+        frame = cv2.resize(image, (self.input_width, self.input_height))
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         common.set_input(self.interpreter, frame)
         self.interpreter.invoke()
 

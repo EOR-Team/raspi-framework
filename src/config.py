@@ -2,7 +2,7 @@
 # 项目参数配置
 #
 # @author n1ghts4kura
-# @date 25-12-5
+# @date 25-12-5 -> 26-01-07
 #
 
 # =============================
@@ -18,9 +18,9 @@ ANNOTATE_ON = False # 是否在显示的图像上绘制标注 (如检测框、�
 CAMERA_INDEX         =     0   # 摄像头索引，默认0为内置摄像头
 CAMERA_WIDTH_COL     =   640   # 摄像头分辨率宽度 (用于数据采集)
 CAMERA_HEIGHT_COL    =   480   # 摄像头分辨率高度 (用于数据采集)
-CAMERA_WIDTH_INF     =   320   # 摄像头分辨率宽度 (用于推理)
-CAMERA_HEIGHT_INF    =   320   # 摄像头分辨率高度 (用于推理)
-CAMERA_FPS           =    60   # 摄像头帧率
+CAMERA_WIDTH_INF     =   800   # 摄像头分辨率宽度 (用于推理)
+CAMERA_HEIGHT_INF    =   600   # 摄像头分辨率高度 (用于推理)
+CAMERA_FPS           =    30   # 摄像头帧率
 CAMERA_FOURCC        = "MJPG"  # 摄像头编码格式
 CAMERA_AUTO_EXPOSURE =     1   # 自动曝光模式
 CAMERA_EXPOSURE      =    64   # 曝光时间
@@ -42,38 +42,41 @@ AIMBOT_MODEL_PATH      = "aimbot/yolov8n.26.1.2_fullint8_edgetpu.tflite"  # 自�
 AIMBOT_CONF_THRESHOLD  = 0.35    # 自瞄模型置信度阈值
 AIMBOT_NMS_THRESHOLD   = 0.45   # 自瞄模型NMS阈值
 
-# === 自瞄PID控制参数 ===
+# === 自瞄 参数 ===
 from simple_pid import PID
-AIMBOT_PID_HOR_KP = 90   # 比例系数
-AIMBOT_PID_HOR_KI = 2.5  # 积分系数
-AIMBOT_PID_HOR_KD = 0.1  # 微分系数
+
+# PID 输出限幅（°/s），用于云台速度控制
+U_MAX = 180.0
+
+CROSSHAIR_X = 0.52   # 准星 X位置
+CROSSHAIR_Y = 0.603  # 准星 Y位置
+
+AIMBOT_PID_HOR_KP = 110   # 比例系数
+AIMBOT_PID_HOR_KI = 6.6  # 积分系数
+AIMBOT_PID_HOR_KD = 4  # 微分系数
 AIMBOT_HOR_PID = PID(
     Kp=AIMBOT_PID_HOR_KP,
     Ki=AIMBOT_PID_HOR_KI,
     Kd=AIMBOT_PID_HOR_KD,
-    setpoint=-0.5,
-    # output_limits=(-100, 100),
+    setpoint=0.0,
+    output_limits=(-U_MAX, U_MAX),
 )
 
-AIMBOT_PID_VER_KP = 90   # 比例系数
-AIMBOT_PID_VER_KI = 2.5  # 积分系数
-AIMBOT_PID_VER_KD = 0.1  # 微分系数
+AIMBOT_PID_VER_KP = 100   # 比例系数
+AIMBOT_PID_VER_KI = 7.5  # 积分系数
+AIMBOT_PID_VER_KD = 3  # 微分系数
 AIMBOT_VER_PID = PID(
     Kp=AIMBOT_PID_VER_KP,
     Ki=AIMBOT_PID_VER_KI,
     Kd=AIMBOT_PID_VER_KD,
-    setpoint=-0.5,
-    # output_limits=(-100, 100),
+    setpoint=0.0,
+    output_limits=(-U_MAX, U_MAX),
 )
 
-# === 自瞄技能配置 ===
 AIMBOT_ACTION_DELAY   = 1 / 60  # 自瞄技能动作执行循环延时（秒）
-AIMBOT_DEADZONE_X_SIZE = 0.05   # 水平死区大小
-AIMBOT_DEADZONE_X_MIN = 0.5 - AIMBOT_DEADZONE_X_SIZE  # 水平死区最小值
-AIMBOT_DEADZONE_X_MAX = 0.5 + AIMBOT_DEADZONE_X_SIZE  # 水平死区最大值
-AIMBOT_DEADZONE_Y_SIZE = 0.05   # 垂直死区大小
-AIMBOT_DEADZONE_Y_MIN = 0.5 - AIMBOT_DEADZONE_Y_SIZE  # 垂直死区最小值
-AIMBOT_DEADZONE_Y_MAX = 0.5 + AIMBOT_DEADZONE_Y_SIZE  # 垂直死区最大值
+AIMBOT_DEADZONE_X_SIZE = 0.025   # 水平死区大小
+AIMBOT_DEADZONE_Y_SIZE = 0.025   # 垂直死区大小
+
 
 # =================================
 
@@ -98,7 +101,7 @@ __all__ = [
     "SERIAL_RX_DELAY",
     "SERIAL_TX_DELAY",
     "AIMBOT_MODEL_PATH",
-    "AIMBOT_PREDICT_DEVICE",
+    "U_MAX",
     "AIMBOT_HOR_PID",
     "AIMBOT_VER_PID",
 ]
