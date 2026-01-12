@@ -10,11 +10,7 @@ import sys
 from datetime import datetime
 from enum import Enum
 
-try:
-    import src.config as config
-except ImportError:
-    import config
-
+import src.config as config
 
 class LogLevel(Enum):
     """日志级别枚举"""
@@ -158,13 +154,13 @@ class Logger:
         """错误日志"""
         self.logger.error(message, *args, **kwargs)
     
-    def critical(self, message: str, *args, **kwargs):
-        """严重错误日志"""
-        self.logger.critical(message, *args, **kwargs)
+    # def critical(self, message: str, *args, **kwargs):
+    #     """严重错误日志"""
+    #     self.logger.critical(message, *args, **kwargs)
     
-    def exception(self, message: str, *args, **kwargs):
-        """异常日志（自动包含异常堆栈）"""
-        self.logger.exception(message, *args, **kwargs)
+    # def exception(self, message: str, *args, **kwargs):
+    #     """异常日志（自动包含异常堆栈）"""
+    #     self.logger.exception(message, *args, **kwargs)
 
 
 # 根据调试模式设置日志级别
@@ -216,14 +212,14 @@ def error(message: str, *args, **kwargs):
     logger.error(message, *args, **kwargs)
 
 
-def critical(message: str, *args, **kwargs):
-    """严重错误日志"""
-    logger.critical(message, *args, **kwargs)
+# def critical(message: str, *args, **kwargs):
+#     """严重错误日志"""
+#     logger.critical(message, *args, **kwargs)
 
 
-def exception(message: str, *args, **kwargs):
-    """异常日志"""
-    logger.exception(message, *args, **kwargs)
+# def exception(message: str, *args, **kwargs):
+#     """异常日志"""
+#     logger.exception(message, *args, **kwargs)
 
 __all__ = [
     "set_debug_mode",
@@ -231,7 +227,7 @@ __all__ = [
     "info",
     "warning",
     "error",
-    "critical",
-    "exception",
-    "get_logger",
+    # "critical",
+    # "exception",
+    # "get_logger",
 ]

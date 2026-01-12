@@ -31,12 +31,7 @@ class Camera:
         return cls._instance
 
     
-    def __init__(
-        self,
-        width: int = config.CAMERA_WIDTH_COL,
-        height: int = config.CAMERA_HEIGHT_COL,
-        fps: int = config.CAMERA_FPS
-    ):
+    def __init__(self, width: int, height: int, fps: int):
         self.width = width
         self.height = height
         self.fps = fps
@@ -159,8 +154,9 @@ class CollectCamera(Camera):
 
     def __init__(self):
         super().__init__(
-            width = config.CAMERA_WIDTH_COL,
-            height = config.CAMERA_HEIGHT_COL
+            width  = config.CAMERA_WIDTH_COL,
+            height = config.CAMERA_HEIGHT_COL,
+            fps    = config.CAMERA_FPS_COL
         )
 
 
@@ -171,7 +167,7 @@ class InferCamera(Camera):
 
     def __init__(self):
         super().__init__(
-            width = config.CAMERA_WIDTH_INF,
+            width  = config.CAMERA_WIDTH_INF,
             height = config.CAMERA_HEIGHT_INF,
-            fps = config.CAMERA_FPS_INF
+            fps    = config.CAMERA_FPS_INF
         )
