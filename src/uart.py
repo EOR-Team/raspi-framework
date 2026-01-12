@@ -169,13 +169,23 @@ def _stop_rx_thread() -> bool:
     return True
 
 
-def readline() -> str:
+def readline(timeout: Optional[float] = None) -> str:
     """
-    从接收队列读取一行数据 阻塞
+    从接收队列读取一行数据
+
+    Args:
+        timeout (Optional[float]): 超时时间，单位秒。默认阻塞等待。
+
+    Returns:
+        str: 读取到的数据行，超时则返回空字符串。
     """
 
-    data = rx_queue.get() # 阻塞等待数据
-    logger.info(f"读取了一行数据: {data}")
+    try:
+        data = rx_queue.get(timeout=timeout)
+        logger.info(f"读取了一行数据: {data}")
+    except:
+        data = ""
+
     return data
 
 
@@ -242,7 +252,7 @@ def _stop_tx_thread() -> bool:
         return False
 
     tx_thread_stop_event.set() # 设置停止事件
-    tx_thread.join() # 等待线程结束
+    # tx_thread.join() # 等待线程结束
     return True
 
 

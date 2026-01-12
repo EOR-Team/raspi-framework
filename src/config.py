@@ -21,6 +21,7 @@ CAMERA_HEIGHT_COL    =   480   # 摄像头分辨率高度 (用于数据采集)
 CAMERA_WIDTH_INF     =   800   # 摄像头分辨率宽度 (用于推理)
 CAMERA_HEIGHT_INF    =   600   # 摄像头分辨率高度 (用于推理)
 CAMERA_FPS           =    30   # 摄像头帧率
+CAMERA_FPS_INF       =    30   # 摄像头帧率 (用于推理)
 CAMERA_FOURCC        = "MJPG"  # 摄像头编码格式
 CAMERA_AUTO_EXPOSURE =     1   # 自动曝光模式
 CAMERA_EXPOSURE      =    64   # 曝光时间
@@ -48,12 +49,15 @@ from simple_pid import PID
 # PID 输出限幅（°/s），用于云台速度控制
 U_MAX = 180.0
 
-CROSSHAIR_X = 0.52   # 准星 X位置
-CROSSHAIR_Y = 0.603  # 准星 Y位置
+CROSSHAIR_X = 0.50   # 准星 X位置
+CROSSHAIR_Y = 0.605  # 准星 Y位置
 
-AIMBOT_PID_HOR_KP = 110   # 比例系数
-AIMBOT_PID_HOR_KI = 6.6  # 积分系数
-AIMBOT_PID_HOR_KD = 4  # 微分系数
+# AIMBOT_PID_HOR_KP = 110   # 比例系数
+# AIMBOT_PID_HOR_KI = 6.6  # 积分系数
+# AIMBOT_PID_HOR_KD = 4  # 微分系数
+AIMBOT_PID_HOR_KP = 120   # 比例系数
+AIMBOT_PID_HOR_KI = 4.0   # 积分系数
+AIMBOT_PID_HOR_KD = 2  # 微分系数
 AIMBOT_HOR_PID = PID(
     Kp=AIMBOT_PID_HOR_KP,
     Ki=AIMBOT_PID_HOR_KI,
@@ -62,9 +66,12 @@ AIMBOT_HOR_PID = PID(
     output_limits=(-U_MAX, U_MAX),
 )
 
-AIMBOT_PID_VER_KP = 100   # 比例系数
-AIMBOT_PID_VER_KI = 7.5  # 积分系数
-AIMBOT_PID_VER_KD = 3  # 微分系数
+# AIMBOT_PID_VER_KP = 100   # 比例系数
+# AIMBOT_PID_VER_KI = 7.5  # 积分系数
+# AIMBOT_PID_VER_KD = 3  # 微分系数
+AIMBOT_PID_VER_KP = 110   # 比例系数
+AIMBOT_PID_VER_KI = 5.0   # 积分系数
+AIMBOT_PID_VER_KD = 2  # 微分系数
 AIMBOT_VER_PID = PID(
     Kp=AIMBOT_PID_VER_KP,
     Ki=AIMBOT_PID_VER_KI,
@@ -74,8 +81,8 @@ AIMBOT_VER_PID = PID(
 )
 
 AIMBOT_ACTION_DELAY   = 1 / 60  # 自瞄技能动作执行循环延时（秒）
-AIMBOT_DEADZONE_X_SIZE = 0.025   # 水平死区大小
-AIMBOT_DEADZONE_Y_SIZE = 0.025   # 垂直死区大小
+AIMBOT_DEADZONE_X_SIZE = 0.02   # 水平死区大小
+AIMBOT_DEADZONE_Y_SIZE = 0.02   # 垂直死区大小
 
 
 # =================================

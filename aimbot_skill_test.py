@@ -5,9 +5,10 @@ from robomaster.gimbal import Gimbal
 from robomaster.blaster import Blaster
 
 from src.vision import InferCamera
-from src import logger, config
+from src import logger, config, uart
 from src.vision.detect import YoloV8Detector
 
+logger.set_debug_mode(False)
 
 # ==== 摄像头 ====
 logger.info("打开摄像头...")
@@ -18,14 +19,25 @@ if not cam.open() or not cam.test_opened():
 logger.info("摄像头打开成功")
 logger.info(f"摄像头参数: {cam.get_actual_settings()}")
 
+# ==== 串口握手（技能测试心跳） ====
+uart.start_backend()
+logger.info("连接串口...")
+line = uart.readline()
+if "aimbot start" not in line:
+    logger.error("串口连接失败，请检查连接")
+    exit(1)
+logger.info("串口连接成功")
+
 # ==== dji robot ====
 ep_robot = robot.Robot()
 logger.info("连接机器人...")
-ep_robot.initialize(conn_type="rndis")
-time.sleep(1)  # 等待连接稳定
-version_info = ep_robot.get_version()
-if version_info is None:
+try:
+    ep_robot.initialize(conn_type="rndis")
+    version_info = ep_robot.get_version()
+    time.sleep(5)  # 等待连接稳定
+except:
     logger.error("机器人连接失败")
+    uart.stop_backend()
     exit(1)
 logger.info(f"机器人连接成功, 版本信息: {version_info}")
 
@@ -48,9 +60,10 @@ logger.info("检测模型加载成功")
 
 not_detected_time = 0
 last_fire_time = 0.0
-fire_interval = 3.5
+fire_interval = 0.3
 frame_counter = 0
 in_deadzone_counter = 0
+last_alive_time = time.time()
 
 # ==== 主循环 ====
 while True:
@@ -60,11 +73,9 @@ while True:
         ret, frame = cam.read()
         if not ret or frame is None:
             logger.warning("摄像头读取失败")
-            time.sleep(0.01)
-            continue
         frame_counter += 1
         if frame_counter % 5 == 0:
-            cv2.imwrite("frame/current.jpg", frame)
+            cv2.imwrite("temp/current.jpg", frame)
         
         detections, infer_ms = detector.invoke(frame)
 
@@ -79,7 +90,6 @@ while True:
                 config.AIMBOT_HOR_PID.reset()
                 config.AIMBOT_VER_PID.reset()
                 not_detected_time = 0
-            time.sleep(0.01)
             continue
         else:
             not_detected_time = 0
@@ -132,7 +142,7 @@ while True:
         ctrl_x = max(-u_max, min(u_max, ctrl_x))
         ctrl_y = max(-u_max, min(u_max, ctrl_y))
 
-          # 直接下发速度指令，符号与画面坐标系相反（俯仰轴方向与水平相反）
+        # 直接下发速度指令，符号与画面坐标系相反（俯仰轴方向与水平相反）
         gimbal.drive_speed(
             pitch_speed=ctrl_y,
             yaw_speed=-ctrl_x,
@@ -143,8 +153,13 @@ while True:
         end_time = time.perf_counter()
         elapsed = end_time - start_time
         remain = config.AIMBOT_ACTION_DELAY - elapsed
-        if remain > 0:
-            time.sleep(remain)
+        delay = remain if remain > 0 else 0.0
+        line = uart.readline(timeout=delay)
+        if len(line) > 0:
+            last_alive_time = time.time()
+        if time.time() - last_alive_time > 2.0:
+            logger.error("与技能测试器失去连接")
+            raise KeyboardInterrupt()
         
     except KeyboardInterrupt:
         logger.info("程序终止")
@@ -157,8 +172,11 @@ while True:
         input_str = input("Press Y to exit...")
         if input_str.lower() == 'y':
             cam.close()
+            gimbal.drive_speed(0, 0)
+            gimbal.recenter().wait_for_completed()
             ep_robot.close()
-            exit(1)
+            uart.stop_backend()
+            exit(0)
         else:
             logger.info("继续运行程序")
             from src import config # 重新加载配置 应该不行。

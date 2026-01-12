@@ -35,9 +35,11 @@ class Camera:
         self,
         width: int = config.CAMERA_WIDTH_COL,
         height: int = config.CAMERA_HEIGHT_COL,
+        fps: int = config.CAMERA_FPS
     ):
         self.width = width
         self.height = height
+        self.fps = fps
 
         self._cap: Optional[cv2.VideoCapture] = None
         self._is_opened: bool = False
@@ -59,7 +61,7 @@ class Camera:
         self._cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*config.CAMERA_FOURCC)) # type:ignore encoding
         self._cap.set(cv2.CAP_PROP_FRAME_WIDTH,  self.width)
         self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
-        self._cap.set(cv2.CAP_PROP_FPS,          config.CAMERA_FPS)
+        self._cap.set(cv2.CAP_PROP_FPS,          self.fps)
         self._cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, config.CAMERA_AUTO_EXPOSURE)
         self._cap.set(cv2.CAP_PROP_EXPOSURE,     config.CAMERA_EXPOSURE)
         # 等待摄像头稳定
@@ -170,5 +172,6 @@ class InferCamera(Camera):
     def __init__(self):
         super().__init__(
             width = config.CAMERA_WIDTH_INF,
-            height = config.CAMERA_HEIGHT_INF
+            height = config.CAMERA_HEIGHT_INF,
+            fps = config.CAMERA_FPS_INF
         )
