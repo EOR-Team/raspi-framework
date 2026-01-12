@@ -9,7 +9,6 @@ import logging
 import sys
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 
 try:
     import src.config as config

@@ -5,10 +5,10 @@
 # @date 25-12-5
 #
 
+from __future__ import annotations
 import cv2
 import time
 import threading
-from typing import Optional, Tuple, Dict, Union
 
 from src import config
 
@@ -20,7 +20,7 @@ class Camera:
     """
 
     # 单例类设计
-    _instance: 'Camera | None' = None
+    _instance: Camera | None = None
     _instance_lock = threading.Lock() # 线程锁 防止多个线程同时访问该类造成问题
 
     def __new__(cls, *args, **kwargs):
@@ -41,7 +41,7 @@ class Camera:
         self.height = height
         self.fps = fps
 
-        self._cap: Optional[cv2.VideoCapture] = None
+        self._cap: cv2.VideoCapture | None = None
         self._is_opened: bool = False
         self.enabled: bool = False   # 摄像头启用标志位
     
@@ -85,7 +85,7 @@ class Camera:
         ret, _ = self._cap.read()
         return ret
     
-    def read(self) -> Tuple[bool, Optional[cv2.typing.MatLike]]:
+    def read(self) -> tuple[bool, cv2.typing.MatLike | None]:
         """
         读取一帧图像
 
@@ -110,7 +110,7 @@ class Camera:
         self._cap.release()
         self._is_opened = False
     
-    def get_actual_settings(self) -> Optional[Dict[str, Union[str, float]]]:
+    def get_actual_settings(self) -> dict | None:
         """
         获取摄像头实际参数
 
