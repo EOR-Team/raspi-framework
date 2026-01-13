@@ -34,7 +34,7 @@ logger.info("连接机器人...")
 try:
     ep_robot.initialize(conn_type="rndis")
     version_info = ep_robot.get_version()
-    time.sleep(5)  # 等待连接稳定
+    time.sleep(2)  # 等待连接稳定
 except:
     logger.error("机器人连接失败")
     uart.stop_backend()
@@ -60,7 +60,7 @@ logger.info("检测模型加载成功")
 
 not_detected_time = 0
 last_fire_time = 0.0
-fire_interval = 0.3
+fire_interval = 0.5
 frame_counter = 0
 in_deadzone_counter = 0
 last_alive_time = time.time()
@@ -104,9 +104,9 @@ while True:
         center_y = detect.xyxyn[1] + detect.xyxyn[3]
         center_y /= 2.0
 
-        delta_x = center_x - config.CROSSHAIR_X
+        delta_x = center_x - config.AIMBOT_CROSSHAIR_X
         # 垂直方向补偿相机抬高偏移
-        delta_y = center_y - config.CROSSHAIR_Y
+        delta_y = center_y - config.AIMBOT_CROSSHAIR_Y
         logger.info(f"delta_x: {delta_x}, delta_y: {delta_y}")
 
         # 检查是否进入死区，在死区内尝试开火，2s 最多一次
@@ -115,8 +115,8 @@ while True:
         #     config.AIMBOT_DEADZONE_Y_MIN <= delta_y <= config.AIMBOT_DEADZONE_Y_MAX
         # )
         in_deadzone = (
-            abs(delta_x) < config.AIMBOT_DEADZONE_X_SIZE and
-            abs(delta_y) < config.AIMBOT_DEADZONE_Y_SIZE
+            abs(delta_x) < config.AIMBOT_CROSSHAIR_X and
+            abs(delta_y) < config.AIMBOT_CROSSHAIR_Y
         )
 
         now = time.perf_counter()
@@ -125,7 +125,7 @@ while True:
         else:
             in_deadzone_counter = 0
 
-        if in_deadzone_counter >= 5 and now - last_fire_time >= fire_interval:
+        if in_deadzone_counter >= 20 and now - last_fire_time >= fire_interval:
             try:
                 gimbal.drive_speed(0, 0)  # 停云台
                 blaster.fire()

@@ -53,7 +53,7 @@ AIMBOT_DEADZONE_HOR_DELTA = 0.025 # 水平轴 PID输出死区阈值 大小为其
 AIMBOT_DEADZONE_VER_DELTA = 0.025 # 垂直轴 PID输出死区阈值 大小为其在整个屏幕占比
 
 AIMBOT_CROSSHAIR_X = 0.500 # 准星 X位置
-AIMBOT_CROSSHAIR_Y = 0.605 # 准星 Y位置
+AIMBOT_CROSSHAIR_Y = 0.610 # 准星 Y位置
 
 # === 技能相关 ===
 AIMBOT_ACTION_DELAY      = 1 / 60 # 技能一轮循环预期耗时 单位 秒
